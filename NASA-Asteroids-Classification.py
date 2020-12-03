@@ -22,6 +22,14 @@ y = LabelEncoder().fit_transform(y)
 
 X.info()
 
+# Droping 0 Variance Columns
+variance = X.var()
+
+for col in X.var().index:
+    if variance[col] == 0:
+        print(col)
+        X.drop(col, axis=1, inplace=True)
+
 
 
 
