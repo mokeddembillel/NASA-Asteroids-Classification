@@ -207,12 +207,9 @@ def plotData2D(y_=y):
     fig, ax = plt.subplots()
     ax.scatter(x = X['Minimum Orbit Intersection'], 
                y = X['Absolute Magnitude'],
-               z = X['Est Dia in M(average)'],
                c = y_.T)
     plt.xlabel("Minimum Orbit Intersection")
-    plt.ylabel("Absolute Magnitude")
-    plt.zlabel("Est Dia in M(average)")
-    
+    plt.ylabel("Absolute Magnitude")    
     plt.show()
 plotData2D()
 
@@ -233,7 +230,10 @@ def plotData3D(y_=y):
     plt.show()
 plotData3D()
 
-# From these Plots we can see that the data is well distributed 
+# From these Plots we can see that the data is well distributed where all hazardous asteroids has 
+# an absolute magnitude which is roughly < 23 and minimum orbit intersection which is < 0.6
+
+
 
 
 
