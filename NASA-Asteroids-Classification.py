@@ -198,8 +198,42 @@ plt.show()
 # keep only those three variables:
 # (Minimum Orbit Intersection, Est Dia in M(average) and Absolute Magnitude)
 
+
+# Plotting the Data since we have only three features 
 X = X.iloc[:, indices]
 
+def plotData2D(y_=y):
+    
+    fig, ax = plt.subplots()
+    ax.scatter(x = X['Minimum Orbit Intersection'], 
+               y = X['Absolute Magnitude'],
+               z = X['Est Dia in M(average)'],
+               c = y_.T)
+    plt.xlabel("Minimum Orbit Intersection")
+    plt.ylabel("Absolute Magnitude")
+    plt.zlabel("Est Dia in M(average)")
+    
+    plt.show()
+plotData2D()
+
+
+def plotData3D(y_=y):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection = '3d')
+    
+    x = X['Minimum Orbit Intersection']
+    y = X['Absolute Magnitude']
+    z = X['Est Dia in M(average)']
+    
+    ax.scatter(x, y, z, c = y_.T)
+    ax.set_xlabel('Minimum Orbit Intersection')
+    ax.set_ylabel('Absolute Magnitude')
+    ax.set_zlabel('Est Dia in M(average)')
+    
+    plt.show()
+plotData3D()
+
+# From these Plots we can see that the data is well distributed 
 
 
 
