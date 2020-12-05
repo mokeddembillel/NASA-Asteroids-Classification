@@ -176,7 +176,29 @@ X = X[['Absolute Magnitude', 'Est Dia in M(average)', 'Relative Velocity km per 
        'Perihelion Distance', 'Perihelion Arg', 'Perihelion Time',
        'Mean Anomaly']]
 
+# Using Random Forest Feature importance to select the most important features
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor(random_state=1, max_depth=10)
 
+model.fit(X,y)
+
+features = X.columns
+importances = model.feature_importances_
+indices = np.argsort(importances)[-1:-4:-1]
+
+plt.title('Feature Importances')
+plt.barh(range(len(indices)), importances[indices], color='b', align='center')
+plt.yticks(range(len(indices)), [features[i] for i in indices])
+plt.xlabel('Relative Importance')
+plt.show()
+
+# Well we can clearly see in the feature importance graph that there are just three 
+# variables which contributes by more then 96% to the target then all the other 
+# variables, the other variables contribute with less then 1%, so we will just 
+# keep only those three variables:
+# (Minimum Orbit Intersection, Est Dia in M(average) and Absolute Magnitude)
+
+X = X.iloc[:, indices]
 
 
 
