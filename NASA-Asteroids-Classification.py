@@ -233,7 +233,17 @@ plotData3D()
 # From these Plots we can see that the data is well distributed where all hazardous asteroids has 
 # an absolute magnitude which is roughly < 23 and minimum orbit intersection which is < 0.6
 
+# Plotting the number instances in Classes
+def plotCounts(y=y):
+    unique, counts = np.unique(y, return_counts=True)
+    print(counts[0]/sum(counts))
+    plt.bar([0, 1], counts, width=0.8, align='center')
+    plt.xticks([0, 1], ['Not Hazardous', 'Hazardous'])
+    plt.show()
+plotCounts()
 
+# unfortunately we can clearly see that the data is imbalanced by having about 84% of the asteroids 
+# as not hazardous and about 16% as hazardous
 
 
 
