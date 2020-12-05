@@ -101,6 +101,74 @@ X.drop('Epoch Osculation', axis=1, inplace=True)
 #   so we will remove them 
 X.drop(['Close Approach Date', 'Epoch Date Close Approach'], axis=1, inplace=True)
 
+# Now we've finished removing features based on logical reasons which are infered 
+# from the features descripton and some googling that i did
+
+# let's check the correlation between the rest of the variables
+correlation = X.corr()
+
+# Plotting a heatmap of the correlation matrix
+def heatmap():
+    fig, ax = plt.subplots()
+    im = ax.imshow(correlation)
+    
+    ax.set_xticks(np.arange(len(correlation.columns)))
+    ax.set_yticks(np.arange(len(correlation.columns)))
+    ax.set_xticklabels(correlation.columns)
+    ax.set_yticklabels(correlation.columns)
+    
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+    ax.set_title("Correlation Matrix")
+    fig.tight_layout()
+    plt.show()
+heatmap()
+
+# - after plotting the heatmap i noticed that the Estimated Diameter min and max has 
+#   a correlation of 1 that means they are stricly correlated, at first i thought 
+#   they were measured in some way but after i googled it, i foundout that they are 
+#   calculated based on the absolute magnitude and an assumed geometric albedo (ratio 
+#   of the light received by a body to the light reflected by that body). since we don't
+#   albedo in our dataset we need to keep only one of them or better approach 
+#   is to calculate the average because keeping the only the min or max will make 
+#   us underestimating or overestimating the asteroid 
+X['Est Dia in M(average)'] = X[['Est Dia in M(min)', 'Est Dia in M(max)']].mean(axis=1)
+X.drop(['Est Dia in M(min)', 'Est Dia in M(max)'], axis=1, inplace=True)
+
+# - Aphelion Distance has about 0.98 correlation with Semi Major Axis and Orbital 
+#   Period and 0.7 with Eccentricity and after a quick search i foundout that Aphelion 
+#   Distance is calculated based on Semi Major Axis and Eccentricity see this article (https://socratic.org/questions/how-do-you-calculate-the-aphelion-and-perihelion-of-a-comet-s-orbit-if-it-has-an#:~:text=The%20perihelion%20distance%20P%3Da,e%3D0.875%20is%20the%20eccentricity.)
+#   and for Orbital Period it's calculated using Kepler’s Third Law based on 
+#   the constant pi, the semi-major axis, the gravitational constant, the mass of 
+#   the Sun, and the mass of the comet. (we can ignore the mass of the comet because 
+#   it's small comparing to the mass of the sun) (take a look at this link: https://public.nrao.edu/ask/how-to-calculate-the-orbital-period-of-a-comet-given-its-closest-and-furthest-orbital-distance/), 
+#   so basically they are all constants besides the semi-major axis ,
+#   so we'll remove these two columns for now 
+X.drop(['Aphelion Dist', 'Orbital Period'], axis=1, inplace=True)
+
+# - We have also Orbit ID has a strong correlation with the Estimated Diameter,
+#   however i still think that Orbit ID should not be removed because multiple asteroids
+#   with the same estimated diameter could have different orbits, but kepping it will 
+#   make the dataset very large since we will have to do a one hot encoding to it since
+#   it is a categorical variable so i think it's better to remove it considering the 
+#   high correlation, Estimated Diameter will do a good job on its own, and for Orbit
+#   Uncertainty, it has high correlation with absolute magnitude and it's calculated 
+#   using eccentricity, orbital period, which we already have it's components, 
+#   and some other parameters
+X.drop(['Orbit Uncertainity', 'Orbit ID'], axis=1, inplace=True)
+
+# - we also have mean motion has a strong negative correlation with Semi Major Axis, 
+#   basically it's calculated by dividing 2*pi on Orbital Period (which is mainly 
+#   calculated using Semi Major Axis) so that make sence (see this article: https://en.wikipedia.org/wiki/Mean_motion)
+#   i think it's okay to drop this since it doesn't appear to hold any valiable information
+X.drop('Mean Motion', axis=1, inplace=True)
+
+# I'm i'm still not quite sure about my way of thinking since i read that high
+# correlation doesn't imply redundancy so i tried to be sure that a variable that
+# i deleted doesn't explain valiable information to the model, but anyway i will still try
+# to fit the model with and without some variables
+
 
 
 
