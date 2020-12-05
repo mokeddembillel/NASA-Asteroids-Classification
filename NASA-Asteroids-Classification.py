@@ -95,6 +95,14 @@ X.drop('Jupiter Tisserand Invariant', axis=1, inplace=True)
 #   to the target
 X.drop('Epoch Osculation', axis=1, inplace=True)
 
+# - Close Approach Date and Epoch Date Close Approach are the same measures in two 
+#   different units, so keeping one of them is fine but i did a little bit of 
+#   searching and i foundout that these two features do not impact the target 
+#   so we will remove them 
+X.drop(['Close Approach Date', 'Epoch Date Close Approach'], axis=1, inplace=True)
+
+
+
 
 
 
