@@ -169,8 +169,12 @@ X.drop('Mean Motion', axis=1, inplace=True)
 # i deleted doesn't explain valiable information to the model, but anyway i will still try
 # to fit the model with and without some variables
 
-
-
+# Reordering our dataset
+X = X[['Absolute Magnitude', 'Est Dia in M(average)', 'Relative Velocity km per sec',
+       'Miss Dist.(kilometers)', 'Minimum Orbit Intersection', 'Eccentricity',
+       'Semi Major Axis', 'Inclination', 'Asc Node Longitude',
+       'Perihelion Distance', 'Perihelion Arg', 'Perihelion Time',
+       'Mean Anomaly']]
 
 
 
