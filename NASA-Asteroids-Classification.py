@@ -202,7 +202,7 @@ plt.show()
 # Plotting the Data since we have only three features 
 X = X.iloc[:, indices]
 
-def plotData2D(y_=y):
+def plotData2D(X=X, y_=y):
     
     fig, ax = plt.subplots()
     ax.scatter(x = X['Minimum Orbit Intersection'], 
@@ -244,6 +244,56 @@ plotCounts()
 
 # unfortunately we can clearly see that the data is imbalanced by having about 84% of the asteroids 
 # as not hazardous and about 16% as hazardous
+
+# HANDLING IMBALANCED DATA
+# to handle the imbalanced data we will use and compare multiple techniques and algorithms
+
+# from the graph above we can clearly see that all Hazardous data points and condensed in a small region, 
+# i don't think using oversampling here is a good idea, instead we could just use undersampling 
+# or try cost-sensetive down-weighting 
+
+# CondensedNearestNeighbour technique for undersampling
+from imblearn.under_sampling import CondensedNearestNeighbour
+cnn = CondensedNearestNeighbour(n_neighbors=5, n_seeds_S=55)
+cnn_X, cnn_y = cnn.fit_resample(X, y)
+plotData2D(cnn_X, cnn_y)
+
+# CondensedNearestNeighbour removes too many instances we will not use it
+
+# NeighbourhoodCleaningRule technique for undersampling
+from imblearn.under_sampling import NeighbourhoodCleaningRule
+ncr = NeighbourhoodCleaningRule(sampling_strategy='majority', n_neighbors=5, kind_sel='mode')
+ncr_X, ncr_y = ncr.fit_resample(X, y)
+plotData2D(ncr_X, ncr_y)
+
+# NeighbourhoodCleaningRule also doesn't work  for this dataset because it removes many data points 
+# in just one region and that will mess up our decision boundary and make our predictions worst.
+
+# to clarify more, all UNN methods won't work perfectly for this dataset because most of data points of 
+# the majority class are condensed in one region while this region is where data points should be removed 
+# from, but UNN methods would remove data points from weeker regions until it clears them out before even 
+# starting to remove from the strong region, and this would change the distribution of data points of 
+# the majority class, and that's a thing we don't want to happen
+
+# this leave us to use random undersampling 
+
+# RandomUnderSampler technique for undersampling
+from imblearn.under_sampling import RandomUnderSampler
+rus = RandomUnderSampler(sampling_strategy=1)
+rus_X, rus_y = rus.fit_resample(X, y)
+plotData2D(rus_X, rus_y)
+
+# Now i think  this is perfect
+
+
+
+
+
+
+
+
+
+
 
 
 
